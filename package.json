@@ -8,7 +8,7 @@
     "dev": "ts-node-dev src/app.ts"
   },
   "keywords": [],
-  "author": "Redemption (Crakton)",
+  "author": "Redemption(Crakton)",
   "license": "ISC",
   "description": "A comprehensive backend server for an e-commerce application built with Express.js and Node.js written in TypeScript",
   "dependencies": {
