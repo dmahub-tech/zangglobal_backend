@@ -18,6 +18,7 @@ import blogRoutes from "./routes/blog.route";
 import fileUpload from "express-fileupload";
 import fs from "fs";
 import path from "path";
+import cronRouter from "./routes/cron.route";
 config();
 
 const app = express();
@@ -74,6 +75,7 @@ app.use("/admin", sellerRoutes);
 app.use("/upload", uploadRoutes);
 app.use("/payments", paymentRoutes);
 app.use("/blogs", blogRoutes);
+app.use('/cron', cronRouter);
 
 
 interface ShiprocketOrderRequest {
