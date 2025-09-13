@@ -206,3 +206,308 @@ export interface IApiResponse<T> {
 	data?: T;
 	error?: string;
 }
+
+
+
+
+// Email Types and Interfaces
+
+export interface OrderDetails {
+  orderId: string;
+  customerName: string;
+  customerEmail?: string;
+  items: OrderItem[];
+  total: number;
+  trackingNumber?: string;
+  estimatedDelivery?: string;
+  shippingAddress?: string;
+  orderDate?: Date;
+  paymentMethod?: string;
+  subtotal?: number;
+  shipping?: number;
+  tax?: number;
+  discounts?: number;
+  couponCode?: string;
+}
+
+export interface OrderItem {
+  id?: string;
+  name: string;
+  quantity: number;
+  price: number;
+  image?: string;
+  sku?: string;
+  variant?: string;
+  color?: string;
+  size?: string;
+}
+
+export interface EmailTemplate {
+  subject: string;
+  html: string;
+  text: string;
+  templateId: string;
+  category: EmailCategory;
+}
+
+export enum EmailCategory {
+  TRANSACTIONAL = "transactional",
+  PROMOTIONAL = "promotional",
+  NOTIFICATION = "notification",
+  SYSTEM = "system",
+}
+
+export enum OrderStatus {
+  PENDING = "pending",
+  PROCESSING = "processing",
+  SHIPPED = "shipped",
+  OUT_FOR_DELIVERY = "out_for_delivery",
+  DELIVERED = "delivered",
+  CANCELLED = "cancelled",
+  REFUNDED = "refunded",
+}
+
+export interface ComplaintDetails {
+  complaintId?: string;
+  email: string;
+  customerName?: string;
+  subject?: string;
+  message: string;
+  category?: ComplaintCategory;
+  priority?: Priority;
+  attachments?: string[];
+}
+
+export enum ComplaintCategory {
+  ORDER_ISSUE = "order_issue",
+  PRODUCT_QUALITY = "product_quality",
+  SHIPPING = "shipping",
+  BILLING = "billing",
+  TECHNICAL = "technical",
+  GENERAL = "general",
+}
+
+export enum Priority {
+  LOW = "low",
+  MEDIUM = "medium",
+  HIGH = "high",
+  URGENT = "urgent",
+}
+
+export interface WelcomeEmailData {
+  email: string;
+  customerName: string;
+  welcomeOffer?: {
+    code: string;
+    discount: number;
+    expiryDays: number;
+  };
+  referralCode?: string;
+}
+
+export interface PasswordResetData {
+  email: string;
+  customerName: string;
+  resetToken: string;
+  expirationTime?: number; // in hours
+}
+
+export interface NewsletterData {
+  email: string;
+  customerName: string;
+  subject: string;
+  content: string;
+  unsubscribeToken: string;
+  previewText?: string;
+  ctaButton?: {
+    text: string;
+    url: string;
+  };
+  images?: string[];
+}
+
+export interface BulkEmailData {
+  subject: string;
+  content: string;
+  htmlContent?: string;
+  segment?: UserSegment;
+  scheduledTime?: Date;
+  campaignId?: string;
+}
+
+export enum UserSegment {
+  ALL_USERS = "all_users",
+  ACTIVE_CUSTOMERS = "active_customers",
+  NEW_CUSTOMERS = "new_customers",
+  VIP_CUSTOMERS = "vip_customers",
+  INACTIVE_CUSTOMERS = "inactive_customers",
+}
+
+export interface EmailStats {
+  sent: number;
+  delivered: number;
+  opened: number;
+  clicked: number;
+  bounced: number;
+  unsubscribed: number;
+  failed: number;
+}
+
+export interface EmailCampaign {
+  id: string;
+  name: string;
+  subject: string;
+  content: string;
+  segment: UserSegment;
+  status: CampaignStatus;
+  scheduledTime?: Date;
+  sentTime?: Date;
+  stats: EmailStats;
+  createdBy: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export enum CampaignStatus {
+  DRAFT = "draft",
+  SCHEDULED = "scheduled",
+  SENDING = "sending",
+  SENT = "sent",
+  CANCELLED = "cancelled",
+}
+
+// Email service configuration
+export interface EmailConfig {
+  host: string;
+  port: number;
+  secure: boolean;
+  auth: {
+    user: string;
+    pass: string;
+  };
+  tls?: {
+    rejectUnauthorized: boolean;
+  };
+  pool?: boolean;
+  maxConnections?: number;
+  maxMessages?: number;
+}
+
+// Email queue job interface
+export interface EmailJob {
+  id: string;
+  type: EmailJobType;
+  priority: number;
+  data: any;
+  attempts: number;
+  maxAttempts: number;
+  delay?: number;
+  createdAt: Date;
+  processedAt?: Date;
+  completedAt?: Date;
+  failedAt?: Date;
+  error?: string;
+}
+
+export enum EmailJobType {
+  SINGLE_EMAIL = "single_email",
+  BULK_EMAIL = "bulk_email",
+  ORDER_STATUS = "order_status",
+  WELCOME = "welcome",
+  PASSWORD_RESET = "password_reset",
+  COMPLAINT_CONFIRMATION = "complaint_confirmation",
+  NEWSLETTER = "newsletter",
+}
+
+// API Response interfaces
+export interface EmailResponse {
+  success: boolean;
+  message: string;
+  data?: any;
+  error?: string;
+  timestamp?: Date;
+}
+
+export interface ValidationError {
+  field: string;
+  message: string;
+  value?: any;
+}
+
+// Webhook interfaces for email events
+export interface EmailWebhookPayload {
+  eventType: EmailEventType;
+  email: string;
+  messageId: string;
+  timestamp: Date;
+  campaignId?: string;
+  metadata?: Record<string, any>;
+}
+
+export enum EmailEventType {
+  SENT = "sent",
+  DELIVERED = "delivered",
+  OPENED = "opened",
+  CLICKED = "clicked",
+  BOUNCED = "bounced",
+  UNSUBSCRIBED = "unsubscribed",
+  SPAM_REPORT = "spam_report",
+  DROPPED = "dropped",
+}
+
+// Unsubscribe management
+export interface UnsubscribeData {
+  email: string;
+  token: string;
+  reason?: string;
+  categories?: EmailCategory[];
+  unsubscribeAll?: boolean;
+}
+
+// Email personalization
+export interface PersonalizationData {
+  customerName?: string;
+  firstName?: string;
+  lastName?: string;
+  customFields?: Record<string, any>;
+  preferences?: UserPreferences;
+  orderHistory?: OrderSummary[];
+  loyaltyPoints?: number;
+  membershipTier?: string;
+}
+
+export interface UserPreferences {
+  language: string;
+  timezone: string;
+  emailFrequency: EmailFrequency;
+  categories: EmailCategory[];
+}
+
+export enum EmailFrequency {
+  DAILY = "daily",
+  WEEKLY = "weekly",
+  MONTHLY = "monthly",
+  NEVER = "never",
+}
+
+export interface OrderSummary {
+  orderId: string;
+  date: Date;
+  total: number;
+  status: OrderStatus;
+  itemCount: number;
+}
+
+// Email template variables
+export interface TemplateVariables {
+  [key: string]: any;
+  customerName?: string;
+  orderId?: string;
+  trackingNumber?: string;
+  companyName?: string;
+  supportEmail?: string;
+  supportPhone?: string;
+  websiteUrl?: string;
+  unsubscribeUrl?: string;
+  currentYear?: number;
+}
