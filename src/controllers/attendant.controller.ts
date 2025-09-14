@@ -16,7 +16,7 @@ class AttendantController {
   // Create a new attendant
   public async createAttendant(req: Request, res: Response): Promise<void> {
     try {
-      const data = req.body?.formData;
+      const data = req.body;
       const attendant = new Attendant(data);
       console.log('Creating attendant with data:', data);
       const savedAttendant = await attendant.save();
