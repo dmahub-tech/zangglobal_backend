@@ -20,6 +20,7 @@ import fileUpload from "express-fileupload";
 import fs from "fs";
 import path from "path";
 import cronRouter from "./routes/cron.route";
+import volunteerRoutes from "./routes/volunteer.route";
 config();
 
 const app = express();
@@ -71,6 +72,8 @@ app.use("/coupons", couponRoutes);
 app.use("/platforms", imageRoutes);
 app.use("/orders", orderRoutes);
 app.use("/attendance", attendanceRoutes);
+app.use("/volunteer", volunteerRoutes);
+
 app.use("/products", productRoutes);
 app.use("/reviews", reviewRoutes);
 app.use("/admin", sellerRoutes);
