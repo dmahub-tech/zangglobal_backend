@@ -4,6 +4,7 @@ import ProductModel from "./product.model";
 import UserModel from "./user.model";
 import ReviewModel from "./review.model";
 import SellerModel from "./seller.model";
+import GalleryModel from "./gallery.model";
 
 export {
 	CartModel as Cart,
@@ -12,4 +13,5 @@ export {
 	SellerModel as Seller,
 	UserModel as User,
 	ReviewModel as Review,
+	GalleryModel as Gallery,
 };

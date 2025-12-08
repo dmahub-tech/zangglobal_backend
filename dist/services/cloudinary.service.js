@@ -52,3 +52,6 @@ class CloudinaryService {
     }
 }
 exports.CloudinaryService = CloudinaryService;
+// Create and export a default instance
+const cloudinaryService = new CloudinaryService();
+exports.default = cloudinaryService;

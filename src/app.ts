@@ -16,6 +16,7 @@ import attendanceRoutes from "./routes/attendant.route";
 import uploadRoutes from "./routes/image.route";
 import paymentRoutes from "./routes/payment.route";
 import blogRoutes from "./routes/blog.route";
+import galleryRoutes from "./routes/gallery.route";
 import fileUpload from "express-fileupload";
 import fs from "fs";
 import path from "path";
@@ -80,6 +81,7 @@ app.use("/admin", sellerRoutes);
 app.use("/upload", uploadRoutes);
 app.use("/payments", paymentRoutes);
 app.use("/blogs", blogRoutes);
+app.use("/gallery", galleryRoutes);
 app.use('/cron', cronRouter);
 
 

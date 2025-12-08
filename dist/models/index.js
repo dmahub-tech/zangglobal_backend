@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Review = exports.User = exports.Seller = exports.Product = exports.Order = exports.Cart = void 0;
+exports.Gallery = exports.Review = exports.User = exports.Seller = exports.Product = exports.Order = exports.Cart = void 0;
 const cart_model_1 = __importDefault(require("./cart.model"));
 exports.Cart = cart_model_1.default;
 const order_model_1 = __importDefault(require("./order.model"));
@@ -16,3 +16,5 @@ const review_model_1 = __importDefault(require("./review.model"));
 exports.Review = review_model_1.default;
 const seller_model_1 = __importDefault(require("./seller.model"));
 exports.Seller = seller_model_1.default;
+const gallery_model_1 = __importDefault(require("./gallery.model"));
+exports.Gallery = gallery_model_1.default;

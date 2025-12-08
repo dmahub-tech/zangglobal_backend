@@ -12,77 +12,75 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const attendance_model_1 = __importDefault(require("../models/attendance.model"));
-class AttendantController {
-    // Get all attendants
-    getAllAttendants(req, res) {
+const volunteer_models_1 = __importDefault(require("../models/volunteer.models"));
+class VolunteerController {
+    // Get all volunteers
+    getAllVolunteers(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const attendants = yield attendance_model_1.default.find().sort({ createdAt: -1 });
-                res.json(attendants);
+                const volunteers = yield volunteer_models_1.default.find().sort({ createdAt: -1 });
+                res.json(volunteers);
             }
             catch (error) {
                 res.status(500).json({ message: error.message });
             }
         });
     }
-    // Create a new attendant
-    createAttendant(req, res) {
+    // Create a new volunteer
+    createVolunteer(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const data = req.body;
-                const attendant = new attendance_model_1.default(data);
-                console.log('Creating attendant with data:', data);
-                const savedAttendant = yield attendant.save();
-                res.status(201).json(savedAttendant);
+                const volunteer = new volunteer_models_1.default(req.body);
+                const savedVolunteer = yield volunteer.save();
+                res.status(201).json(savedVolunteer);
             }
             catch (error) {
                 res.status(400).json({ message: error.message });
             }
         });
     }
-    // Get a single attendant
-    getAttendant(req, res) {
+    // Get a single volunteer
+    getVolunteer(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const attendant = yield attendance_model_1.default.findById(req.params.id);
-                if (!attendant) {
-                    res.status(404).json({ message: "Attendant not found" });
+                const volunteer = yield volunteer_models_1.default.findById(req.params.id);
+                if (!volunteer) {
+                    res.status(404).json({ message: "Volunteer not found" });
                     return;
                 }
-                res.json(attendant);
+                res.json(volunteer);
             }
             catch (error) {
                 res.status(500).json({ message: error.message });
             }
         });
     }
-    // Update an attendant
-    updateAttendant(req, res) {
+    // Update a volunteer
+    updateVolunteer(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const attendant = yield attendance_model_1.default.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
-                if (!attendant) {
-                    res.status(404).json({ message: "Attendant not found" });
+                const volunteer = yield volunteer_models_1.default.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
+                if (!volunteer) {
+                    res.status(404).json({ message: "Volunteer not found" });
                     return;
                 }
-                res.json(attendant);
+                res.json(volunteer);
             }
             catch (error) {
                 res.status(400).json({ message: error.message });
             }
         });
     }
-    // Delete an attendant
-    deleteAttendant(req, res) {
+    // Delete a volunteer
+    deleteVolunteer(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const attendant = yield attendance_model_1.default.findByIdAndDelete(req.params.id);
-                if (!attendant) {
-                    res.status(404).json({ message: "Attendant not found" });
+                const volunteer = yield volunteer_models_1.default.findByIdAndDelete(req.params.id);
+                if (!volunteer) {
+                    res.status(404).json({ message: "Volunteer not found" });
                     return;
                 }
-                res.json({ message: "Attendant deleted successfully" });
+                res.json({ message: "Volunteer deleted successfully" });
             }
             catch (error) {
                 res.status(500).json({ message: error.message });
@@ -90,4 +88,4 @@ class AttendantController {
         });
     }
 }
-exports.default = new AttendantController();
+exports.default = new VolunteerController();

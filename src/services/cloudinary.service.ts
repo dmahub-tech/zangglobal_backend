@@ -58,3 +58,7 @@ export class CloudinaryService {
 		return await this.cloudinaryV2.uploader.destroy(publicId);
 	}
 }
+
+// Create and export a default instance
+const cloudinaryService = new CloudinaryService();
+export default cloudinaryService;

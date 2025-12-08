@@ -117,6 +117,17 @@ export interface IReview extends Document {
 	createdAt: Date;
 }
 
+export interface IGallery extends Document {
+	galleryId: string;
+	title: string;
+	description: string;
+	imageUrl: string;
+	category: string;
+	isActive: boolean;
+	createdAt: Date;
+	updatedAt: Date;
+}
+
 export interface ICoupon extends Document {
 	code: string;
 	discountPercentage: number;
