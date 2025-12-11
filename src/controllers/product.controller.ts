@@ -83,6 +83,7 @@ export class ProductController {
 				return;
 			}
 
+
 			res.status(200).json(product);
 		} catch (error) {
 			res
