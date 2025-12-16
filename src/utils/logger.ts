@@ -32,7 +32,7 @@ const format = winston.format.combine(
 );
 
 // Define transports
-const transports = [
+const transports: any[] = [
   // Console transport (always enabled in development)
   new winston.transports.Console({
     format: winston.format.combine(

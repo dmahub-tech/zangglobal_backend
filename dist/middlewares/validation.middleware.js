@@ -23,22 +23,22 @@ const validateRequest = (schema) => {
             });
             next();
         }
-        catch (error) {
-            if (error instanceof zod_1.z.ZodError) {
-                const errors = error.errors.map((err) => ({
-                    field: err.path.join('.'),
-                    message: err.message,
+        catch (err) {
+            if (err instanceof zod_1.z.ZodError) {
+                const errors = err.issues.map((issue) => ({
+                    field: issue.path.join("."),
+                    message: issue.message,
                 }));
                 res.status(400).json({
                     success: false,
-                    message: 'Validation failed',
+                    message: "Validation failed",
                     errors,
                 });
                 return;
             }
             res.status(500).json({
                 success: false,
-                message: 'Internal server error during validation',
+                message: "Internal server error during validation",
             });
         }
     });
@@ -52,7 +52,7 @@ const validate = (validations) => {
         if (!errors.isEmpty()) {
             res.status(400).json({
                 success: false,
-                message: 'Validation failed',
+                message: "Validation failed",
                 errors: errors.array(),
             });
             return;
@@ -64,39 +64,40 @@ exports.validate = validate;
 // Common validation schemas
 exports.validationSchemas = {
     // MongoDB ObjectId validation
-    mongoId: zod_1.z.string().regex(/^[0-9a-fA-F]{24}$/, 'Invalid ID format'),
+    mongoId: zod_1.z.string().regex(/^[0-9a-fA-F]{24}$/, "Invalid ID format"),
     // Email validation
-    email: zod_1.z.string().email('Invalid email address').toLowerCase(),
+    email: zod_1.z.string().email("Invalid email address").toLowerCase(),
     // Password validation
-    password: zod_1.z.string()
-        .min(8, 'Password must be at least 8 characters')
-        .regex(/[A-Z]/, 'Password must contain at least one uppercase letter')
-        .regex(/[a-z]/, 'Password must contain at least one lowercase letter')
-        .regex(/[0-9]/, 'Password must contain at least one number')
-        .regex(/[!@#$%^&*]/, 'Password must contain at least one special character'),
+    password: zod_1.z
+        .string()
+        .min(8, "Password must be at least 8 characters")
+        .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
+        .regex(/[a-z]/, "Password must contain at least one lowercase letter")
+        .regex(/[0-9]/, "Password must contain at least one number")
+        .regex(/[!@#$%^&*]/, "Password must contain at least one special character"),
     // Phone validation
-    phone: zod_1.z.string().regex(/^\+?[1-9]\d{1,14}$/, 'Invalid phone number'),
+    phone: zod_1.z.string().regex(/^\+?[1-9]\d{1,14}$/, "Invalid phone number"),
     // Pagination
     pagination: zod_1.z.object({
         page: zod_1.z.coerce.number().min(1).default(1),
         limit: zod_1.z.coerce.number().min(1).max(100).default(10),
         sort: zod_1.z.string().optional(),
-        order: zod_1.z.enum(['asc', 'desc']).default('desc'),
+        order: zod_1.z.enum(["asc", "desc"]).default("desc"),
     }),
     // Price validation
-    price: zod_1.z.number().positive('Price must be positive').multipleOf(0.01),
+    price: zod_1.z.number().positive("Price must be positive").multipleOf(0.01),
     // Quantity validation
-    quantity: zod_1.z.number().int().positive('Quantity must be a positive integer'),
+    quantity: zod_1.z.number().int().positive("Quantity must be a positive integer"),
     // URL validation
-    url: zod_1.z.string().url('Invalid URL format'),
+    url: zod_1.z.string().url("Invalid URL format"),
     // Date validation
-    date: zod_1.z.string().datetime('Invalid date format'),
+    date: zod_1.z.string().datetime("Invalid date format"),
 };
 // Authentication validation schemas
 exports.authValidation = {
     register: zod_1.z.object({
         body: zod_1.z.object({
-            name: zod_1.z.string().min(2, 'Name must be at least 2 characters'),
+            name: zod_1.z.string().min(2, "Name must be at least 2 characters"),
             email: exports.validationSchemas.email,
             password: exports.validationSchemas.password,
             phone: exports.validationSchemas.phone.optional(),
@@ -105,7 +106,7 @@ exports.authValidation = {
     login: zod_1.z.object({
         body: zod_1.z.object({
             email: exports.validationSchemas.email,
-            password: zod_1.z.string().min(1, 'Password is required'),
+            password: zod_1.z.string().min(1, "Password is required"),
         }),
     }),
     forgotPassword: zod_1.z.object({
@@ -115,13 +116,13 @@ exports.authValidation = {
     }),
     resetPassword: zod_1.z.object({
         body: zod_1.z.object({
-            token: zod_1.z.string().min(1, 'Token is required'),
+            token: zod_1.z.string().min(1, "Token is required"),
             password: exports.validationSchemas.password,
         }),
     }),
     changePassword: zod_1.z.object({
         body: zod_1.z.object({
-            currentPassword: zod_1.z.string().min(1, 'Current password is required'),
+            currentPassword: zod_1.z.string().min(1, "Current password is required"),
             newPassword: exports.validationSchemas.password,
         }),
     }),
@@ -130,12 +131,14 @@ exports.authValidation = {
 exports.productValidation = {
     create: zod_1.z.object({
         body: zod_1.z.object({
-            name: zod_1.z.string().min(2, 'Product name must be at least 2 characters'),
-            description: zod_1.z.string().min(10, 'Description must be at least 10 characters'),
+            name: zod_1.z.string().min(2, "Product name must be at least 2 characters"),
+            description: zod_1.z
+                .string()
+                .min(10, "Description must be at least 10 characters"),
             price: exports.validationSchemas.price,
-            category: zod_1.z.string().min(1, 'Category is required'),
+            category: zod_1.z.string().min(1, "Category is required"),
             inStockValue: exports.validationSchemas.quantity,
-            img: zod_1.z.array(zod_1.z.string().url()).min(1, 'At least one image is required'),
+            img: zod_1.z.array(zod_1.z.string().url()).min(1, "At least one image is required"),
             discount: zod_1.z.number().min(0).max(100).optional(),
             isActive: zod_1.z.boolean().default(true),
         }),
@@ -175,11 +178,13 @@ exports.orderValidation = {
     create: zod_1.z.object({
         body: zod_1.z.object({
             userId: exports.validationSchemas.mongoId,
-            items: zod_1.z.array(zod_1.z.object({
+            items: zod_1.z
+                .array(zod_1.z.object({
                 productId: exports.validationSchemas.mongoId,
                 quantity: exports.validationSchemas.quantity,
                 price: exports.validationSchemas.price,
-            })).min(1, 'At least one item is required'),
+            }))
+                .min(1, "At least one item is required"),
             shippingAddress: zod_1.z.object({
                 street: zod_1.z.string().min(1),
                 city: zod_1.z.string().min(1),
@@ -187,7 +192,7 @@ exports.orderValidation = {
                 country: zod_1.z.string().min(1),
                 postalCode: zod_1.z.string().min(1),
             }),
-            paymentMethod: zod_1.z.enum(['card', 'paypal', 'cash_on_delivery']),
+            paymentMethod: zod_1.z.enum(["card", "paypal", "cash_on_delivery"]),
             totalAmount: exports.validationSchemas.price,
         }),
     }),
@@ -196,7 +201,13 @@ exports.orderValidation = {
             id: exports.validationSchemas.mongoId,
         }),
         body: zod_1.z.object({
-            status: zod_1.z.enum(['pending', 'processing', 'shipped', 'delivered', 'cancelled']),
+            status: zod_1.z.enum([
+                "pending",
+                "processing",
+                "shipped",
+                "delivered",
+                "cancelled",
+            ]),
             trackingNumber: zod_1.z.string().optional(),
         }),
     }),
@@ -243,7 +254,7 @@ exports.reviewValidation = {
             productId: exports.validationSchemas.mongoId,
             userId: exports.validationSchemas.mongoId,
             rating: zod_1.z.number().min(1).max(5),
-            comment: zod_1.z.string().min(10, 'Comment must be at least 10 characters'),
+            comment: zod_1.z.string().min(10, "Comment must be at least 10 characters"),
         }),
     }),
     update: zod_1.z.object({
@@ -271,13 +282,13 @@ exports.reviewValidation = {
 const sanitizeInput = (req, res, next) => {
     // Recursively sanitize object
     const sanitize = (obj) => {
-        if (typeof obj !== 'object' || obj === null) {
-            if (typeof obj === 'string') {
+        if (typeof obj !== "object" || obj === null) {
+            if (typeof obj === "string") {
                 // Remove potential XSS vectors
                 return obj
-                    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
-                    .replace(/javascript:/gi, '')
-                    .replace(/on\w+\s*=/gi, '')
+                    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, "")
+                    .replace(/javascript:/gi, "")
+                    .replace(/on\w+\s*=/gi, "")
                     .trim();
             }
             return obj;
@@ -289,7 +300,7 @@ const sanitizeInput = (req, res, next) => {
         for (const key in obj) {
             if (obj.hasOwnProperty(key)) {
                 // Remove keys that start with $ to prevent MongoDB injection
-                if (!key.startsWith('$')) {
+                if (!key.startsWith("$")) {
                     sanitized[key] = sanitize(obj[key]);
                 }
             }
