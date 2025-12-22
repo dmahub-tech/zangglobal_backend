@@ -88,6 +88,7 @@ app.use("/blogs", blog_route_1.default);
 app.use("/gallery", gallery_route_1.default);
 app.use('/cron', cron_route_1.default);
 const PORT = process.env.PORT || 5000;
+console.log("hi");
 const startServer = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         yield (0, db_1.connectDB)();

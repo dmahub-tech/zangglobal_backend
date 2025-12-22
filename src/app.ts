@@ -102,6 +102,7 @@ interface ShiprocketOrderRequest {
 }
 
 const PORT = process.env.PORT || 5000;
+console.log("hi")
 
 const startServer = async () => {
 	try {
